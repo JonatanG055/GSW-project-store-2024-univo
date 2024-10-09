@@ -1,15 +1,25 @@
-import express from "express";
-import dotenvConfig from "dotenv";
-import mongoconnect from "./database/mongo.connection.js";
-import Routes from "./routers/product.routes.js";
+import dotenv from "dotenv"; // Cambiado de require a import
+import express from "express"; // Cambiado de require a import
+import mongoconnect from "./database/mongo.connection.js"; // Cambiado de require a import
+import Routes from "./routers/product.routes.js"; // Cambiado de require a import
 
-let port = 3000
+// Configurar dotenv para usar variables de entorno
+dotenv.config();
 
-const app = express()
-mongoconnect()
-app.use(express.json())
-app.use("/api", Routes)
+let port = process.env.PORT || 3000;
 
-app.listen(port, () =>{console.log(`servidor corriendo en http://localhost:${port}`);
+const app = express();
+mongoconnect();
 
-})
+// Middleware para manejar JSON
+app.use(express.json());
+app.use("/api", Routes);
+
+// Iniciar servidor
+app.listen(port, () => {
+    console.log(`Servidor corriendo en http://localhost:${port}`);
+});
+
+app.get("/", (req, res) => {
+    res.send("Servidor funcionando correctamente");
+});
